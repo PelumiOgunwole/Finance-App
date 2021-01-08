@@ -1,0 +1,117 @@
+ScreenManage:
+  Page_One:
+  Page_Two:
+  Page_Three:
+  Page_Four:
+
+
+<Page_One>:
+  name: "Month"
+  #id:first
+
+  MDGridLayout:
+    cols: 1
+    adaptive_height: False
+    adaptive_width: False
+    adaptive_size: False
+    md_bg_color: app.theme_cls.primary_color
+    MDRaisedButton:
+
+      id: Income
+      text: "INCOME"
+      on_release:
+        app.root.current='Income'
+
+      size_hint_x: 0.33
+      size_hint_y: 0.33
+
+    MDRaisedButton:
+      id: Budget
+      text: "BUDGET"
+      on_release:
+        app.root.current='Income'
+      size_hint_x: 0.33
+      size_hint_y: 0.33
+
+    MDRaisedButton:
+      id: Events
+      text: "EXPENSES"
+      on_release:
+        app.root.current='Income'
+      size_hint_x: 0.33
+      size_hint_y: 0.33
+
+
+
+
+
+<Page_Two>:
+  id: income
+
+  name: "Income"
+  MDFloatLayout:
+    MDLabel:
+      id:label
+      text: "Year"
+      textsize: 300
+      pos: 50,550
+      size_hint: 0.3,0.08
+
+
+    MDLabel:
+      id:label
+      text: "Month"
+      textsize: 100
+      pos: 50,500
+      size_hint: 0.3,0.08
+
+    MDDropDownItem:
+      id: caller
+      text: "Choose Month"
+      textsize: 100
+      pos: 50,450
+      size_hint: 0.9,0.08
+      on_release: root.dropdown.open()
+      #on_release: root.option_callback(str(self.txt))
+
+
+    MDLabel:
+      id:label
+      text: "Description"
+      textsize:100
+      pos:50,350
+      size_hint:0.3,0.08
+
+    MDTextFieldRound:
+      pos:50,300
+      size_hint:0.9,0.08
+      icon_left: "calendar"
+      hint_text: "Description"
+
+
+    MDLabel:
+      id:label
+      text: "Amount"
+      textsize:100
+      pos:50,250
+      size_hint:0.3,0.08
+
+    MDTextFieldRound:
+      pos:50,200
+      size_hint:0.9,0.08
+      hint_text: "Amount"
+      icon_left: "currency"
+
+    MDRoundFlatButton:
+      text: "SAVE ENTRY"
+      text_color: 0, 1, 0, 1
+      pos: 50, 150
+      size_hint:0.9,0.08
+
+
+<Page_Three>:
+  name: "Budget"
+
+<Page_Four>:
+  name: "Expense"
+
