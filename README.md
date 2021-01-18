@@ -1,2 +1,2 @@
 # Finance-App
-This app is built using python and KivyMD
+This app is being built using python and KivyMD
