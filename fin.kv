@@ -10,11 +10,14 @@ ScreenManage:
   #id:first
 
   MDGridLayout:
-    cols: 1
+    cols: 3
     adaptive_height: False
     adaptive_width: False
     adaptive_size: False
     md_bg_color: app.theme_cls.primary_color
+    spacing: 150
+    borderwidth: 20
+    #orientation: 'vertical'
     MDRaisedButton:
 
       id: Income
@@ -29,7 +32,7 @@ ScreenManage:
       id: Budget
       text: "BUDGET"
       on_release:
-        app.root.current='Income'
+        app.root.current='Budget'
       size_hint_x: 0.33
       size_hint_y: 0.33
 
@@ -37,7 +40,7 @@ ScreenManage:
       id: Events
       text: "EXPENSES"
       on_release:
-        app.root.current='Income'
+        app.root.current='Expense'
       size_hint_x: 0.33
       size_hint_y: 0.33
 
@@ -47,71 +50,218 @@ ScreenManage:
 
 <Page_Two>:
   id: income
-
+  description: description.text
+  amount: amount.text
   name: "Income"
-  MDFloatLayout:
-    MDLabel:
-      id:label
-      text: "Year"
-      textsize: 300
-      pos: 50,550
-      size_hint: 0.3,0.08
+  on_enter: root.show_income_items
 
 
-    MDLabel:
-      id:label
-      text: "Month"
-      textsize: 100
-      pos: 50,500
-      size_hint: 0.3,0.08
 
-    MDDropDownItem:
-      id: caller
-      text: "Choose Month"
-      textsize: 100
-      pos: 50,450
-      size_hint: 0.9,0.08
-      on_release: root.dropdown.open()
-      #on_release: root.option_callback(str(self.txt))
+  MDRelativeLayout:
+    md_bg_color: [0, 0, 0, .3]
 
 
-    MDLabel:
-      id:label
-      text: "Description"
-      textsize:100
-      pos:50,350
-      size_hint:0.3,0.08
+    MDTabs:
+      id: tabs
+      on_tab_switch: app.on_tab_switch(*args)
+      allow_stretch: True
 
-    MDTextFieldRound:
-      pos:50,300
-      size_hint:0.9,0.08
-      icon_left: "calendar"
-      hint_text: "Description"
+      MDTabsBase: # The content of this tab is supposed to fill the whole screen and look neat
+        id: incomes
+        text: "Incomes"
+        allow_stretch: True
+        MDLabel:
+          id:label
+          text: "Year :"
+          textsize: 300
+          pos: 50,550
+          size_hint: 0.3,0.08
+          pos_hint: {'x': 0.03, 'y': 0.76}
 
 
-    MDLabel:
-      id:label
-      text: "Amount"
-      textsize:100
-      pos:50,250
-      size_hint:0.3,0.08
+          MDLabel:
+            id:label
+            text: income.get_time()
+            textsize: 300
+            pos: 150,550
+            size_hint: 0.3,0.08
+            pos_hint: {'x': 0.2, 'y': 0.76}
 
-    MDTextFieldRound:
-      pos:50,200
-      size_hint:0.9,0.08
-      hint_text: "Amount"
-      icon_left: "currency"
 
-    MDRoundFlatButton:
-      text: "SAVE ENTRY"
-      text_color: 0, 1, 0, 1
-      pos: 50, 150
-      size_hint:0.9,0.08
+            #MDLabel:
+            #id:label
+            #text: "Month: "
+            #textsize: 100
+            #pos: 50,500
+            #size_hint: 0.3,0.08
+            #pos_hint: {'x': 0, 'y': 0.77}
+
+          MDDropDownItem:
+            id: caller
+            text: "Choose Month"
+            textsize: 100
+            pos: 45,475
+            size_hint: 0.9,0.08
+            selected_color: self.theme_cls.primary_dark_hue
+            #on_release: root.add_income_items()
+            on_release: root.dropdown.open()
+            pos_hint: {'x': 0.03, 'y': 0.71}
+
+
+
+          MDLabel:
+            id:label
+            text: "Description"
+            textsize:100
+            pos:50,400
+            size_hint:0.3,0.08
+            pos_hint: {'x': 0.03, 'y': 0.61}
+
+          MDTextFieldRound:
+            id: description
+            pos:50,350
+            size_hint:0.9,0.08
+            icon_left: "ornament"
+            hint_text: "Description: "
+            max_text_length: 7
+            pos_hint: {'x': 0.04, 'y': 0.53}
+
+
+          MDLabel:
+            id:label
+            text: "Amount: "
+            textsize:100
+            pos:50,300
+            size_hint:0.3,0.08
+            pos_hint: {'x': 0.03, 'y': 0.43}
+
+          MDTextFieldRound:
+            id: amount
+            pos:50,250
+            size_hint:0.9,0.08
+            hint_text: "Amount"
+            icon_left: "cash"
+            max_text_length: 12
+            input_filter: 'float'
+            pos_hint: {'x': 0.04, 'y': 0.35}
+
+          MDFillRoundFlatButton:
+            text: "SAVE ENTRY"
+            text_color: 0, 1, 0, 1
+            pos: 50, 180
+            size_hint: 0.96,0.08
+            pos_hint: {'x': 0.01, 'y': 0.25}
+            on_release: income.ids.description.text=""
+            on_release: income.ids.amount.text=""
+            on_press: root.insert_data()
+            #on_press: root.show_income_items()
+
+          MDRelativeLayout:
+
+
+            MDGridLayout:
+              pos_hint: {'x': 0.01, 'y': 0.198}
+              md_bg_color: [0, 1, 0.7, .2]
+              size_hint: 1, None
+              size_hint_y: None
+              height: 20
+              cols: 4
+
+              MDLabel:
+                text: "S/N"
+                color: 'blue'
+
+              MDLabel:
+                text: "MONTH"
+                color: 'blue'
+
+              MDLabel:
+                text: "SOURCE"
+                color: 'blue'
+              MDLabel:
+                text: "AMOUNT"
+                color: 'blue'
+
+            MDRelativeLayout:
+              md_bg_color: [0, 1, 0.7, .2]
+              adaptive_height: True
+
+              pos_hint: {'x': 0.01, 'y': 0.01}
+              RecycleView:
+                scroll_type: ['bars', 'content']
+                scroll_wheel_distance: dp(114)
+                bar_width: dp(30)
+                viewclass: 'SelectableButton'
+                data: [{'text': str(x)} for x in root.data_items1]
+                SelectableRecycleGridLayout:
+
+                  cols: 4
+                  default_size: None, dp(26)
+                  default_size_hint: 1, None
+                  size_hint_y: None
+                  height: self.minimum_height
+                  orientation: 'lr-tb'
+                  multiselect: True
+                  touch_multiselect: True
+
+      MDTabsBase:
+        id: budgets
+        text: "Budgets"
+
+      MDTabsBase:
+        id: events
+        text: "Events"
+
+
+
+
+
+
+<TextInputPopup>:
+  textinput: textinput
+  text_input: txtinput
+  id: textinput
+  title: "TABLE"
+  size_hint: 0.6, 0.6
+  size: 400, 400
+  auto_dismiss: False
+  BoxLayout:
+    orientation: "vertical"
+    TextInput:
+      id: txtinput
+      text: root.obj_text
+    Button:
+      id:update
+      size_hint: 1, 0.2
+      text: "Update Changes"
+      #on_press:root.third
+      on_release:
+        root.obj.update_changes(txtinput.text)
+
+
+        root.dismiss()
+
+    Button:
+      size_hint: 1, 0.2
+      text: "Cancel Changes"
+      on_release: root.dismiss()
+
+<SelectableButton>:
+  # Draw a background to indicate selection
+  canvas.before:
+    Color:
+      #rgba: (1.0, 0,1, .1, .3) if self.selected else (0, 0, 0, 1)
+      rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
+    Rectangle:
+      pos: self.pos
+      size: self.size
 
 
 <Page_Three>:
   name: "Budget"
+  id: budget
 
 <Page_Four>:
   name: "Expense"
+  id: expense
 
